@@ -2,14 +2,13 @@ import json
 from dotenv import load_dotenv
 import os
 import base64
-from requests import post
+from requests import post, get
 
 load_dotenv()
 
 client_id = os.getenv("CLIENT_ID")
 client_secret = os.getenv("CLIENT_SECRET")
 
-print(client_id)
 
 def get_token():
     #concatenate client id and client secret in base 64 to get auth token
@@ -37,7 +36,25 @@ def get_auth_header(token):
         "Authorization": "Bearer " + token
     }
 
+def search_for_track(token, keyword):
+    url = "https://api.spotify.com/v1/search"
+    headers = get_auth_header(token=token)
+    query = f"?q={keyword}&type=track&limit=1"
+
+    query_url = url + query 
+    result = get(query_url, headers=headers)
+    json_result = json.loads(result.content)["tracks"]["items"]
+    if len(json_result) == 0:
+        print("No tracks exist under this artist!")
+        return None
+    return json_result[0]
+
+    # use the get method for this endpoint
+
+
 
 token = get_token()
-print(token)
+print(search_for_track(token, "chase atlantic")["name"])
+
+
     

@@ -51,10 +51,25 @@ def search_for_track(token, keyword):
 
     # use the get method for this endpoint
 
+def create_playlist(token, user_id):
+    url = 'https://api.spotify.com/v1/users/' + user_id +'/playlists'
+
+    headers = get_auth_header(token)
+
+    data = {
+    "name": "New Test Playlist"}
+
+    #make a request
+    result = post(url, headers=headers, data=data, json=True)
+    json_result = json.loads(result.content)
+    return json_result
+   
+   
 
 
 token = get_token()
 print(search_for_track(token, "chase atlantic")["name"])
+print(create_playlist(token, 'ammuiyer'))
 
 
     

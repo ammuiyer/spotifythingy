@@ -58,6 +58,8 @@ def search_for_track(token, keyword):
 
     # use the get method for this endpoint
 
+
+
    
 
 def request_token_auth_flow():
@@ -106,18 +108,28 @@ def add_song_to_playlist(playlist_id, songs_list=None):
     r = requests.post(api_url, data=json.dumps(data), headers=auth_header, params=body)
 
 
-# token = get_token()
-# songs = [search_for_track(token, "chase atlantic")]
+token1 = get_token()
 
-# token = request_token_auth_flow()['access_token']
-# playlist_id = create_playlist(username=username, token=token)
-# add_song_to_playlist(playlist_id, songs)
+token = request_token_auth_flow()['access_token']
+playlist_id = create_playlist(username=username, token=token)
 
 #importing csv
 import pandas as pd
-df = pd.read_csv(filepath)
+df = pd.read_csv(filepath).dropna()
 
-print(df.to_string())
+for index, row in df.iterrows():
+    song_unparsed = row[0]
+    if(song_unparsed.startswith("https://")):
+        #get song w link input
+        add_song_to_playlist(playlist_id=playlist_id, songs_list = [song_unparsed[30:]])
+
+
+    else:
+        #get song with keyword input
+        add_song_to_playlist(playlist_id=playlist_id, songs_list = [search_for_track(token1, song_unparsed)])
+
+
+
 
 
 
@@ -126,3 +138,4 @@ print(df.to_string())
 
 
     
+

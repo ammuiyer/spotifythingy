@@ -14,6 +14,7 @@ client_secret = os.getenv("CLIENT_SECRET")
 redirect = os.getenv("REDIRECT_URI")
 playlist_name = os.getenv("PLAYLIST_NAME")
 username = os.getenv("USERNAME")
+filepath = os.getenv("FILEPATH")
 
 
 def get_token():
@@ -99,16 +100,24 @@ def add_song_to_playlist(playlist_id, songs_list=None):
     data = {
     "playlist_id": playlist_id
     }
-    r = requests.post(api_url, data=json.dumps(data), headers=auth_header)
-    response = r.json()
-    return response["id"]
+    body = {
+        "uris": songs_list
+    }
+    r = requests.post(api_url, data=json.dumps(data), headers=auth_header, params=body)
 
-token = get_token()
-print(search_for_track(token, "chase atlantic"))
 
-token = request_token_auth_flow()['access_token']
-playlist_id = create_playlist(username=username, token=token)
-add_song_to_playlist(playlist_id)
+# token = get_token()
+# songs = [search_for_track(token, "chase atlantic")]
+
+# token = request_token_auth_flow()['access_token']
+# playlist_id = create_playlist(username=username, token=token)
+# add_song_to_playlist(playlist_id, songs)
+
+#importing csv
+import pandas as pd
+df = pd.read_csv(filepath)
+
+print(df.to_string())
 
 
 
